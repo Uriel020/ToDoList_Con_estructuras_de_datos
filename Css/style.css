@@ -1,0 +1,130 @@
+:root {
+    --Primary: #EEE7CE;
+    --Secundary: #006A6A;
+    --Terciary: #232323;
+    --White: #FFFFFF;
+    --Black: #000000;
+}
+
+html {
+    font-size: 62.5%;
+    box-sizing: border-box;
+    scroll-snap-type: y mandatory;
+}
+
+*,
+*:before,
+*:after {
+    box-sizing: inherit;
+    font-family: "Dosis", sans-serif;
+}
+
+body {
+    font-size: 1.6rem;
+    line-height: 1.5;
+    background: linear-gradient(to bottom, var(--Primary) 30%, var(--Secundary));
+    height: 100vh;
+}
+
+/**Generics Values**/
+
+h1,h2,h3,p{
+    margin: 0;
+}
+
+h1{
+    font-size: 2.5rem;
+}
+
+h2{
+    
+}
+
+input{
+    border: none;
+    background-color: var(--Primary);
+    font-family: monospace;
+
+}
+
+input:focus{
+    outline: none;
+}
+
+.container{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 3rem;
+}
+
+/**Header**/
+
+header {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 35rem;
+}
+
+.logotype__container {
+    background-color: var(--Terciary);
+    border-radius: 50%;
+    padding: .5rem;
+}
+
+.logotype {
+    background-image: url(/Imgs/T.svg);
+    background-repeat: no-repeat;
+    background-size: contain;
+    width: 13rem;
+    height: 13rem;
+}
+
+.logotype:hover{
+    
+}
+
+@media screen and (min-width: 300px) {
+
+    .logotype {
+        width: 15rem;
+        height: 15rem;
+    }
+}
+
+
+
+/**To Do Section**/
+
+.welcomeMessage{
+    flex-direction: column;
+    align-items: start;
+}
+
+#fecha{
+    letter-spacing: .1rem;
+}
+
+.inputHomework{
+    background-color: var(--White);
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem;
+    border-radius: .5rem;
+}
+
+#input{
+    width: 80%;
+    border-radius: .5rem;
+}
+
+#enter{
+    cursor: pointer;
+}
+
+#enter:hover{
+    transform: scale(1.1)
+
+}
