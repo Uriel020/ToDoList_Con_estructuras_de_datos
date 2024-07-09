@@ -1,3 +1,4 @@
+
 document.addEventListener('DOMContentLoaded', () => {
     // Mostrar la fecha actual en el elemento con id 'current_date'
     const currentDate = new Date();
@@ -6,11 +7,11 @@ document.addEventListener('DOMContentLoaded', () => {
     formattedDate = formattedDate.charAt(0).toUpperCase() + formattedDate.slice(1);
     document.getElementById('current_date').textContent = formattedDate;
 
-    // Obtener referencias a los elementos del DOM
-    const todoInput = document.getElementById("todo-input");
+    // Elementos del DOM
+    const todoInput = document.querySelector(".todo__input"); // Cambiado a selector de clase
     const dateInput = document.getElementById("date");
     const createButton = document.getElementById("create");
-    const todoList = document.getElementById("todo-list");
+    const todoList = document.getElementById("todo__list");
 
     // Cola para mantener las tareas ordenadas por fecha
     let tasksQueue = [];
@@ -25,7 +26,16 @@ document.addEventListener('DOMContentLoaded', () => {
         dateInput.setAttribute('min', minDate);
     };
 
-    setDateMin();
+    // Función para cargar las tareas desde el localStorage
+    const loadTasksFromLocalStorage = () => {
+        const storedTasks = localStorage.getItem('tasks');
+        return storedTasks ? JSON.parse(storedTasks) : [];
+    };
+
+    // Función para guardar las tareas en el localStorage
+    const saveTasksToLocalStorage = () => {
+        localStorage.setItem('tasks', JSON.stringify(tasksQueue));
+    };
 
     // Función para agregar una tarea a la cola y ordenar por fecha
     const addTaskToQueue = (todoText, todoDate) => {
@@ -36,13 +46,18 @@ document.addEventListener('DOMContentLoaded', () => {
         renderTodoList();
     };
 
-    // Función para renderizar la lista de tareas en el DOM
-    const renderTodoList = () => {
-        todoList.innerHTML = '';
-        tasksQueue.forEach((task, index) => {
-            const todoItem = createTodoElement(task, index);
-            todoList.appendChild(todoItem);
-        });
+    // Función para fijar o desfijar una tarea
+    const pinTask = (index) => {
+        tasksQueue[index].pinned = !tasksQueue[index].pinned;
+        saveTasksToLocalStorage();
+        renderTodoList();
+    };
+
+    // Función para eliminar una tarea
+    const deleteTask = (index) => {
+        tasksQueue.splice(index, 1);
+        saveTasksToLocalStorage();
+        renderTodoList();
     };
 
     // Función para crear un elemento de tarea con botones
@@ -57,6 +72,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const todoActions = document.createElement("div");
         todoActions.classList.add("todo-actions");
 
+        // Botones de acción
         const setButton = createButtonElement(task.pinned ? "Fijada" : "Fijar", "set-btn", () => pinTask(index));
         todoActions.appendChild(setButton);
 
@@ -79,29 +95,13 @@ document.addEventListener('DOMContentLoaded', () => {
         return button;
     };
 
-    // Función para fijar o desfijar una tarea
-    const pinTask = (index) => {
-        tasksQueue[index].pinned = !tasksQueue[index].pinned;
-        saveTasksToLocalStorage();
-        renderTodoList();
-    };
-
-    // Función para eliminar una tarea
-    const deleteTask = (index) => {
-        tasksQueue.splice(index, 1);
-        saveTasksToLocalStorage();
-        renderTodoList();
-    };
-
-    // Función para cargar las tareas desde el localStorage
-    const loadTasksFromLocalStorage = () => {
-        const storedTasks = localStorage.getItem('tasks');
-        return storedTasks ? JSON.parse(storedTasks) : [];
-    };
-
-    // Función para guardar las tareas en el localStorage
-    const saveTasksToLocalStorage = () => {
-        localStorage.setItem('tasks', JSON.stringify(tasksQueue));
+    // Función para renderizar la lista de tareas en el DOM
+    const renderTodoList = () => {
+        todoList.innerHTML = '';
+        tasksQueue.forEach((task, index) => {
+            const todoItem = createTodoElement(task, index);
+            todoList.appendChild(todoItem);
+        });
     };
 
     // Event listener para crear una nueva tarea
@@ -117,6 +117,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         addTaskToQueue(todoText, todoDate);
 
+        // Limpiar campos de entrada
         todoInput.value = "";
         dateInput.value = "";
     });
@@ -127,6 +128,6 @@ document.addEventListener('DOMContentLoaded', () => {
         renderTodoList();
     };
 
-    initialize();
+    setDateMin(); // Configurar la fecha mínima en la carga inicial
+    initialize(); // Inicializar la aplicación
 });
-
