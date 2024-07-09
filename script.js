@@ -1,142 +1,132 @@
-const todoInput = document.querySelector(".todo-input");
-const priorityInput = document.querySelector(".priority-input");
-const todoButton = document.querySelector(".todo-button");
-const todoList = document.querySelector(".todo-list");
-const filterOption = document.querySelector(".filter-todo");
+document.addEventListener('DOMContentLoaded', () => {
+    // Mostrar la fecha actual en el elemento con id 'current_date'
+    const currentDate = new Date();
+    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    let formattedDate = new Intl.DateTimeFormat('es-ES', options).format(currentDate);
+    formattedDate = formattedDate.charAt(0).toUpperCase() + formattedDate.slice(1);
+    document.getElementById('current_date').textContent = formattedDate;
 
-// Eventos principales
-document.addEventListener("DOMContentLoaded", getLocalTodos);
-todoButton.addEventListener("click", addTodo);
-todoList.addEventListener("click", deleteCheck);
-filterOption.addEventListener("change", filterTodo);
+    // Obtener referencias a los elementos del DOM
+    const todoInput = document.getElementById("input");
+    const dateInput = document.getElementById("date");
+    const createButton = document.getElementById("create");
+    const todoList = document.getElementById("todo-list");
 
-// Función para añadir una nueva tarea
-function addTodo(event) {
-    event.preventDefault();
+    // Cola para mantener las tareas ordenadas por fecha
+    let tasksQueue = [];
 
-    const todoDiv = document.createElement("div");
-    todoDiv.classList.add("todo");
+    // Establecer la fecha mínima para el campo de fecha
+    const setDateMin = () => {
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = String(today.getMonth() + 1).padStart(2, '0');
+        const day = String(today.getDate()).padStart(2, '0');
+        const minDate = `${year}-${month}-${day}`;
+        dateInput.setAttribute('min', minDate);
+    };
 
-    const newTodo = document.createElement("li");
-    newTodo.innerText = todoInput.value;
-    newTodo.classList.add("todo-item");
-    todoDiv.appendChild(newTodo);
+    setDateMin();
 
-    const priority = parseInt(priorityInput.value) || 1;  // Si no se ingresa prioridad, se establece en 1
-    todoDiv.setAttribute('data-priority', priority);
+    // Función para agregar una tarea a la cola y ordenar por fecha
+    const addTaskToQueue = (todoText, todoDate) => {
+        const newTask = { text: todoText, date: todoDate, pinned: false };
+        tasksQueue.push(newTask);
+        tasksQueue.sort((task1, task2) => new Date(task1.date) - new Date(task2.date));
+        saveTasksToLocalStorage();
+        renderTodoList();
+    };
 
-    const completedButton = document.createElement("button");
-    completedButton.innerHTML = '<i class="fas fa-check-circle"></i>';
-    completedButton.classList.add("complete-btn");
-    todoDiv.appendChild(completedButton);
-
-    const trashButton = document.createElement("button");
-    trashButton.innerHTML = '<i class="fas fa-trash"></i>';
-    trashButton.classList.add("trash-btn");
-    todoDiv.appendChild(trashButton);
-
-    todoList.appendChild(todoDiv);
-
-    saveLocalTodos(todoInput.value, priority);
-    todoInput.value = "";
-    priorityInput.value = "";
-
-    displayTodos();
-}
-
-// Función para eliminar o completar una tarea
-function deleteCheck(e) {
-    const item = e.target;
-
-    if (item.classList[0] === "trash-btn") {
-        const todo = item.parentElement;
-        todo.classList.add("slide");
-        removeLocalTodos(todo);
-        todo.addEventListener("transitionend", function() {
-            todo.remove();
+    // Función para renderizar la lista de tareas en el DOM
+    const renderTodoList = () => {
+        todoList.innerHTML = '';
+        tasksQueue.forEach((task, index) => {
+            const todoItem = createTodoElement(task, index);
+            todoList.appendChild(todoItem);
         });
-    }
+    };
 
-    if (item.classList[0] === "complete-btn") {
-        const todo = item.parentElement;
-        todo.classList.toggle("completed");
-    }
-}
+    // Función para crear un elemento de tarea con botones
+    const createTodoElement = (task, index) => {
+        const todoItem = document.createElement("div");
+        todoItem.classList.add("todo-item");
 
-// Función para filtrar las tareas
-function filterTodo() {
-    const todos = todoList.childNodes;
-    todos.forEach(function(todo) {
-        switch (filterOption.value) {
-            case "all":
-                todo.style.display = "flex";
-                break;
-            case "completed":
-                if (todo.classList.contains("completed")) {
-                    todo.style.display = "flex";
-                } else {
-                    todo.style.display = "none";
-                }
-                break;
-            case "incompleted":
-                if (!todo.classList.contains("completed")) {
-                    todo.style.display = "flex";
-                } else {
-                    todo.style.display = "none";
-                }
-                break;
+        const todoInfo = document.createElement("p");
+        todoInfo.innerHTML = `<strong>TO-DO:</strong> ${task.text} <br> <strong>Deadline:</strong> ${task.date}`;
+        todoItem.appendChild(todoInfo);
+
+        const todoActions = document.createElement("div");
+        todoActions.classList.add("todo-actions");
+
+        const setButton = createButtonElement(task.pinned ? "Fijada" : "Fijar", "set-btn", () => pinTask(index));
+        todoActions.appendChild(setButton);
+
+        const editButton = createButtonElement("Editar", "edit-btn", () => editTask(index));
+        todoActions.appendChild(editButton);
+
+        const deleteButton = createButtonElement("Eliminar", "delete-btn", () => deleteTask(index));
+        todoActions.appendChild(deleteButton);
+
+        todoItem.appendChild(todoActions);
+        return todoItem;
+    };
+
+    // Función para crear un botón con texto, clase y función clickHandler
+    const createButtonElement = (text, className, clickHandler) => {
+        const button = document.createElement("button");
+        button.textContent = text;
+        button.classList.add(className);
+        button.addEventListener("click", clickHandler);
+        return button;
+    };
+
+    // Función para fijar o desfijar una tarea
+    const pinTask = (index) => {
+        tasksQueue[index].pinned = !tasksQueue[index].pinned;
+        saveTasksToLocalStorage();
+        renderTodoList();
+    };
+
+    // Función para eliminar una tarea
+    const deleteTask = (index) => {
+        tasksQueue.splice(index, 1);
+        saveTasksToLocalStorage();
+        renderTodoList();
+    };
+
+    // Función para cargar las tareas desde el localStorage
+    const loadTasksFromLocalStorage = () => {
+        const storedTasks = localStorage.getItem('tasks');
+        return storedTasks ? JSON.parse(storedTasks) : [];
+    };
+
+    // Función para guardar las tareas en el localStorage
+    const saveTasksToLocalStorage = () => {
+        localStorage.setItem('tasks', JSON.stringify(tasksQueue));
+    };
+
+    // Event listener para crear una nueva tarea
+    createButton.addEventListener("click", (event) => {
+        event.preventDefault();
+        const todoText = todoInput.value.trim();
+        const todoDate = dateInput.value;
+
+        if (todoText === "" || todoDate === "") {
+            alert("Por favor, completa todos los campos.");
+            return;
         }
-    });
-}
 
-// Función para guardar tareas en localStorage
-function saveLocalTodos(todo, priority) {
-    let todos = localStorage.getItem("todos") === null ? [] : JSON.parse(localStorage.getItem("todos"));
-    todos.push({ value: todo, priority: priority, timestamp: new Date().getTime() });
-    localStorage.setItem("todos", JSON.stringify(todos));
-}
+        addTaskToQueue(todoText, todoDate);
 
-// Función para obtener tareas desde localStorage
-function getLocalTodos() {
-    let todos = localStorage.getItem("todos") === null ? [] : JSON.parse(localStorage.getItem("todos"));
-    todos.forEach(function(todo) {
-        const todoDiv = document.createElement("div");
-        todoDiv.classList.add("todo");
-
-        const newTodo = document.createElement("li");
-        newTodo.innerText = todo.value;
-        newTodo.classList.add("todo-item");
-        todoDiv.appendChild(newTodo);
-
-        todoDiv.setAttribute('data-priority', todo.priority);
-
-        const completedButton = document.createElement("button");
-        completedButton.innerHTML = '<i class="fas fa-check-circle"></i>';
-        completedButton.classList.add("complete-btn");
-        todoDiv.appendChild(completedButton);
-
-        const trashButton = document.createElement("button");
-        trashButton.innerHTML = '<i class="fas fa-trash"></i>';
-        trashButton.classList.add("trash-btn");
-        todoDiv.appendChild(trashButton);
-
-        todoList.appendChild(todoDiv);
+        todoInput.value = "";
+        dateInput.value = "";
     });
 
-    displayTodos();
-}
+    // Inicialización al cargar la página
+    const initialize = () => {
+        tasksQueue = loadTasksFromLocalStorage();
+        renderTodoList();
+    };
 
-// Función para eliminar tareas de localStorage
-function removeLocalTodos(todo) {
-    let todos = localStorage.getItem("todos") === null ? [] : JSON.parse(localStorage.getItem("todos"));
-    const todoIndex = todo.children[0].innerText;
-    todos.splice(todos.findIndex(t => t.value === todoIndex), 1);
-    localStorage.setItem("todos", JSON.stringify(todos));
-}
+    initialize();
+});
 
-// Función para mostrar las tareas ordenadas por prioridad
-function displayTodos() {
-    const todos = Array.from(todoList.children);
-    todos.sort((a, b) => b.getAttribute('data-priority') - a.getAttribute('data-priority'));
-    todos.forEach(todo => todoList.appendChild(todo));
-}
