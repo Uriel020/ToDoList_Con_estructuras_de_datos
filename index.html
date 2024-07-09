@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
     <meta charset="UTF-8">
@@ -8,12 +8,11 @@
     <link rel="preload" href="Css/normalize.css" as="style">
     <link rel="stylesheet" href="Css/normalize.css">
     <link rel="preload" href="Css/style.css" as="style">
-    <link rel="stylesheet" href="/Css/style.css">
+    <link rel="stylesheet" href="Css/style.css">
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Dosis:wght@200..800&display=swap" rel="stylesheet">
-
 </head>
 
 <body>
@@ -27,10 +26,8 @@
             <p id="current_date"></p>
             <h1>¡Hola! ¿Estás listo para completar tus tareas?</h1>
             <div class="input__homework">
-                <input type="text" class="todo-input" placeholder="Añade el pendiente..."> 
+                <input type="text" class="todo-input" placeholder="Añade el pendiente...">
                 <input type="date" id="date">
-                </input>
-
                 <button id="create" type="submit">
                     <i>
                         <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-square-rounded-plus"
@@ -45,11 +42,15 @@
                 </button>
             </div>
             <div id="tasks-container" class="tasks-container">
-                <div id="todo-list" class="todo-list"></div>
-                <footer>
-                    <p>© ToDoList || Uriel Rosario y Obal Nina</p>
-                </footer>
-                <script src="script.js"></script>
+                <div id="todo__list" class="todo__list"></div>
+            </div>
+        </div>
+    </section>
+    <footer>
+        <p>© ToDoList || Uriel Rosario y Obal Nina</p>
+    </footer>
+
+    <script src="script.js"></script>
 </body>
 
 </html>
