@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('current_date').textContent = formattedDate;
 
     // Obtener referencias a los elementos del DOM
-    const todoInput = document.getElementById("input");
+    const todoInput = document.getElementById("todo-input");
     const dateInput = document.getElementById("date");
     const createButton = document.getElementById("create");
     const todoList = document.getElementById("todo-list");
