@@ -1,0 +1,173 @@
+:root {
+    --Primary: #EEE7CE;
+    --Secundary: #006A6A;
+    --Terciary: #232323;
+    --White: #FFFFFF;
+    --Black: #000000;
+}
+
+html {
+    font-size: 62.5%;
+    box-sizing: border-box;
+    scroll-snap-type: y mandatory;
+    min-height: 100%;
+}
+
+*,
+*:before,
+*:after {
+    box-sizing: inherit;
+    font-family: "Dosis", sans-serif;
+    padding: 0;
+    margin: 0;
+    min-height: 100%;
+}
+
+body {
+    font-size: 1.6rem;
+    line-height: 1.5;
+    background: linear-gradient(to bottom, var(--Primary) 30%, var(--Secundary));
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+/**Generics Values**/
+
+h1,
+h2,
+h3,
+p {
+    margin: 0;
+}
+
+h1 {
+    font-size: 2.5rem;
+}
+
+h2 {}
+
+input {
+    border: none;
+    border-radius: .5rem;
+    background-color: var(--Primary);
+    font-family: monospace;
+    padding: 1rem;
+}
+
+input:focus {
+    outline: none;
+}
+
+/**Header**/
+
+header {
+    display: flex;
+    justify-content: center;
+    max-height: 40rem;
+    padding: 8rem;
+
+}
+
+.logotype__container {
+    background-color: var(--Terciary);
+    border-radius: 50%;
+    padding: 1rem;
+}
+
+.logotype {
+    background-image: url(/Imgs/T.svg);
+    background-size: contain;
+    width: 13rem;
+    height: 13rem;
+}
+
+@media screen and (min-width: 250px) {
+    .logotype {
+        width: 15rem;
+        height: 15rem;
+    }
+}
+
+/**Create Homework**/
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 1rem;
+    flex: 1;
+}
+
+.input__homework {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .5rem
+}
+
+#input {
+    flex-grow: 2;
+}
+
+#create {
+    width: 4.5rem;
+    height: 4.5rem;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    background-color: var(--Primary);
+}
+
+#create:hover {
+    transform: scale(1.08);
+}
+
+#create:focus{
+    outline: none;
+}
+
+.todo-item {
+    background-color: var(--Primary);
+    border-radius: 1rem;
+    padding: 1rem;
+    margin-top: 1rem;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.todo-item p {
+    margin-bottom: 0.5rem;
+}
+
+.todo-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 0.5rem;
+}
+
+.todo-actions button {
+    margin-left: 0.5rem;
+    padding: 0.5rem 1rem;
+    border: none;
+    background-color: var(--Secundary);
+    color: var(--White);
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.todo-actions button:hover {
+    background-color: var(--Terciary);
+}
+
+/**Footer**/
+
+footer {
+    text-align: center;
+    margin-top: 5rem;
+    padding: 1rem 0;
+    width: 100%;
+    background-color: var(--Terciary);
+    color: var(--White);
+}
+
+

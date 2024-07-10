@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ToDo List</title>
+    <link rel="preload" href="Css/normalize.css" as="style">
+    <link rel="stylesheet" href="Css/normalize.css">
+    <link rel="preload" href="Css/style.css" as="style">
+    <link rel="stylesheet" href="Css/style.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dosis:wght@200..800&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <header>
+        <div class="logotype__container">
+            <div class="logotype"></div>
+        </div>
+    </header>
+    <section class="container">
+        <div class="welcome__message">
+            <p id="current_date"></p>
+            <h1>¡Hola! ¿Estás listo para completar tus tareas?</h1>
+            <div class="input__homework">
+                <input type="text" class="todo-input" placeholder="Añade el pendiente...">
+                <input type="date" id="date">
+                <button id="create" type="submit">
+                    <i>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-square-rounded-plus"
+                            width="32" height="32" viewBox="0 0 24 22" stroke-width="2" stroke="#000000" fill="none"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                            <path d="M12 3c7.2 0 9 1.8 9 9s-1.8 9 -9 9s-9 -1.8 -9 -9s1.8 -9 9 -9z" />
+                            <path d="M15 12h-6" />
+                            <path d="M12 9v6" />
+                        </svg>
+                    </i>
+                </button>
+            </div>
+            <div id="tasks-container" class="tasks-container">
+                <div id="todo__list" class="todo__list"></div>
+            </div>
+        </div>
+    </section>
+    <footer>
+        <p>© ToDoList || Uriel Rosario y Obal Nina</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
