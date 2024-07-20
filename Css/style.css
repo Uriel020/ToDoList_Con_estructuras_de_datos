@@ -48,7 +48,7 @@ h1 {
 h2 {}
 
 input {
-    border: solid;
+    border: none;
     border-radius: .5rem;
     background-color: var(--Primary);
     font-family: monospace;
@@ -103,6 +103,10 @@ header {
     display: flex;
     flex-wrap: wrap;
     gap: .5rem
+}
+
+.input__homework input{
+    border: solid;
 }
 
 .todo-input {
