@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Función para agregar una tarea a la cola y ordenar por prioridad y fecha
     const addTaskToQueue = (todoText, todoDate, todoPriority) => {
-        const newTask = { text: todoText, date: todoDate, priority: todoPriority, pinned: true };
+        const newTask = { text: todoText, date: todoDate, priority: todoPriority, pinned: false }; // Cambiar pinned a false
         tasksQueue.push(newTask);
         sortTasksByPriorityAndDate();
         saveTasksToLocalStorage();
