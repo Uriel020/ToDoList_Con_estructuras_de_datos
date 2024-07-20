@@ -27,7 +27,7 @@ body {
     font-size: 1.6rem;
     line-height: 1.5;
     background: linear-gradient(to bottom, var(--Primary) 30%, var(--Secundary));
-    min-height: 100%;
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
 }
@@ -48,7 +48,7 @@ h1 {
 h2 {}
 
 input {
-    border: none;
+    border: solid;
     border-radius: .5rem;
     background-color: var(--Primary);
     font-family: monospace;
@@ -105,7 +105,7 @@ header {
     gap: .5rem
 }
 
-#input {
+.todo-input {
     flex-grow: 2;
 }
 
